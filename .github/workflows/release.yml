@@ -105,7 +105,7 @@ jobs:
           # Token para acceder al repositorio de homebrew (necesitas configurar este secret)
           token: ${{ secrets.GH_HOMEBREW_TOOLCHAIN }}
           # Nombre de tu fórmula (cambia "toolchain" por el nombre real de tu fórmula)
-          formula: cpcready-toolchain
+          formula: toolchain
           # Tag será determinado automáticamente desde github.ref
           tag: ${{ github.ref }}
           # Revision será determinada automáticamente desde github.sha
