@@ -80,7 +80,7 @@ jobs:
           tar -czf toolchain-${{ steps.tag_info.outputs.tag_name }}.tar.gz \
             --exclude='.git' \
             --exclude='.github' \
-            --exclude='*.tar.gz' \
+            --exclude='toolchain-${{ steps.tag_info.outputs.tag_name }}.tar.gz' \
             --exclude='node_modules' \
             --exclude='.DS_Store' \
             .
