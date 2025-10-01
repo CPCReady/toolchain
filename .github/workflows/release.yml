@@ -110,6 +110,7 @@ jobs:
           tag: ${{ github.ref }}
           # Revision será determinada automáticamente desde github.sha
           revision: ${{ github.sha }}
+          tap: cpcready/homebrew-toolchain
           # Opcional: tap personalizado si no usas homebrew/core
           # tap: tu-usuario/homebrew-tu-tap
           # Opcional: configurar usuario para el commit
