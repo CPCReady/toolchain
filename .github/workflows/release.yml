@@ -99,19 +99,19 @@ jobs:
           asset_name: cpcready-toolchain-${{ steps.tag_info.outputs.tag_name }}.tar.gz
           asset_content_type: application/gzip
 
-      # - name: Actualizar fórmula de Homebrew
-      #   uses: dawidd6/action-homebrew-bump-formula@v3
-      #   with:
-      #     # Token para acceder al repositorio de homebrew (necesitas configurar este secret)
-      #     token: ${{ secrets.GH_HOMEBREW_TOOLCHAIN }}
-      #     # Nombre de tu fórmula (cambia "toolchain" por el nombre real de tu fórmula)
-      #     formula: cpcready-toolchain
-      #     # Tag será determinado automáticamente desde github.ref
-      #     tag: ${{ github.ref }}
-      #     # Revision será determinada automáticamente desde github.sha
-      #     revision: ${{ github.sha }}
-      #     # Opcional: tap personalizado si no usas homebrew/core
-      #     # tap: tu-usuario/homebrew-tu-tap
-      #     # Opcional: configurar usuario para el commit
-      #     # user_name: Tu Nombre
-      #     # user_email: tu-email@ejemplo.com
+      - name: Actualizar fórmula de Homebrew
+        uses: dawidd6/action-homebrew-bump-formula@v3
+        with:
+          # Token para acceder al repositorio de homebrew (necesitas configurar este secret)
+          token: ${{ secrets.GH_HOMEBREW_TOOLCHAIN }}
+          # Nombre de tu fórmula (cambia "toolchain" por el nombre real de tu fórmula)
+          formula: cpcready-toolchain
+          # Tag será determinado automáticamente desde github.ref
+          tag: ${{ github.ref }}
+          # Revision será determinada automáticamente desde github.sha
+          revision: ${{ github.sha }}
+          # Opcional: tap personalizado si no usas homebrew/core
+          # tap: tu-usuario/homebrew-tu-tap
+          # Opcional: configurar usuario para el commit
+          # user_name: Tu Nombre
+          # user_email: tu-email@ejemplo.com
