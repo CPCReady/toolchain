@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+
+# CPC Wrapper Script
+# Permite ejecutar comandos cpc-* pasando el nombre del comando como parámetro
+# Uso: cpc <comando> [argumentos...]
+# Ejemplo: cpc version, cpc help, cpc disc, etc.
+# Compatible con bash y zsh
+
+# Determinar el directorio del script de forma compatible con bash y zsh
+if [[ -n "${BASH_SOURCE[0]}" ]]; then
+    # Estamos en bash
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+elif [[ -n "${(%):-%x}" ]]; then
+    # Estamos en zsh
+    SCRIPT_DIR="$(cd "$(dirname "${(%):-%x}")" && pwd)"
+else
+    # Fallback para otros shells
+    SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+fi
+
+#CPC_COMMON="$(brew --prefix)/opt/cpcready-tools/libexec/cpc-common.sh"
+
+export CPCREADY_DIR="$SCRIPT_DIR"
+
+# Función para mostrar ayuda
+show_usage() {
+    echo "Usage: cpc <command> [arguments...]"
+    echo ""
+    echo "Available commands:"
+    echo "  commands   - List available commands"
+    echo "  disc       - Create a virtual disk"
+    echo "  help       - Show help message"
+    echo "  run        - Run a program in the emulator"
+    echo "  save       - Save a file to the virtual disk"
+    echo "  version    - Show version information"  
+    echo ""
+    echo "Example: cpc version"
+    echo "Example: cpc help"
+    echo "Example: cpc save myfile.bas"
+}
+
+# Verificar que se proporcionó al menos un argumento
+if [ $# -eq 0 ]; then
+    show_usage
+    exit 1
+fi
+
+# Obtener el comando
+COMMAND="$1"
+shift  # Remover el primer argumento para pasar el resto al script
+
+# Construir la ruta del script (ahora busca en lib/ con el patrón cpc-*)
+SCRIPT_PATH="$CPCREADY_DIR/lib/cpc-${COMMAND}.sh"
+
+# Verificar que el script existe
+if [ ! -f "$SCRIPT_PATH" ]; then
+    echo "Error: Command '$COMMAND' not found."
+    echo ""
+    show_usage
+    exit 1
+fi
+
+# Verificar que el script es ejecutable
+if [ ! -x "$SCRIPT_PATH" ]; then
+    chmod +x "$SCRIPT_PATH"
+fi
+
+# Ejecutar el script correspondiente con los argumentos restantes
+# Usar bash explícitamente para mayor compatibilidad
+export CPCREADY_DIR
+bash "$SCRIPT_PATH" "$@"
+
