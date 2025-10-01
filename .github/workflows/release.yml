@@ -75,15 +75,19 @@ jobs:
 
       - name: Crear archivo tar.gz
         run: |
+          # Crear un directorio temporal para el archivo tar.gz
+          mkdir ../release_temp
           # Crear archivo tar.gz con el contenido del proyecto (excluyendo .git y otros archivos innecesarios)
-          # El archivo cfg/version ya está incluido automáticamente
-          tar -czf toolchain-${{ steps.tag_info.outputs.tag_name }}.tar.gz \
+          tar -czf ../release_temp/toolchain-${{ steps.tag_info.outputs.tag_name }}.tar.gz \
             --exclude='.git' \
             --exclude='.github' \
-            --exclude='toolchain-${{ steps.tag_info.outputs.tag_name }}.tar.gz' \
             --exclude='node_modules' \
             --exclude='.DS_Store' \
             .
+          # Mover el archivo tar.gz al directorio actual
+          mv ../release_temp/toolchain-${{ steps.tag_info.outputs.tag_name }}.tar.gz .
+          # Eliminar el directorio temporal
+          rmdir ../release_temp
 
       - name: Subir tar.gz al release
         uses: actions/upload-release-asset@v1
