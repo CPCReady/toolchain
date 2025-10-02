@@ -39,5 +39,5 @@ Para establecer o actualizar un valor para una sección y clave específicas. Si
 Para compilar el programa, puedes usar `gcc`:
 
 ```bash
-gcc -I$(brew --prefix)/include -L$(brew --prefix)/lib -o cpc-config main.c -linih
+gcc -I$(brew --prefix)/include -L$(brew --prefix)/lib -o cpc-ini main.c -linih
 ```
