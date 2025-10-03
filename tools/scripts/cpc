@@ -18,6 +18,17 @@ else
     SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 fi
 
+if [[ -z "$SCRIPT_DIR" ]]; then
+    echo "Error: No se pudo determinar el directorio del script."
+    exit 1
+fi
+
+if [[ -e ".dev" ]]; then
+    echo "El fichero existe"
+else
+    echo "El fichero NO existe"
+fi
+
 #CPC_COMMON="$(brew --prefix)/opt/cpcready-tools/libexec/cpc-common.sh"
 
 export CPCREADY_DIR="$SCRIPT_DIR"
