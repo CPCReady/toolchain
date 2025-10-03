@@ -26,10 +26,10 @@ Thumbs.db
 *.rar
 
 # archivos cpcready
-*.cpcready
-*.cpc
-*.envrc
+.cpcready
+.cpc
+.envrc
 */tests
-*publish-release.sh
+publish-release.sh
 0Basura/
-*commit.sh
+commit.sh
