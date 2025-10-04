@@ -24,24 +24,44 @@
 ##  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##--------------------------------------------------------------------------------
 
-RED='\e[31m'
-BLUE='\e[34m'
-GREEN='\e[32m'
-YELLOW='\e[33m'
-YELLOW_BOLD='\e[1;33m'
-RESET='\e[0m'
 
+
+# Función para detectar si el terminal soporta colores
+function __cpcready_supports_color() {
+  # Verificar si NO estamos en un terminal "dumb" y si el terminal soporta color
+  if [[ "$TERM" == "dumb" ]]; then
+    return 1
+  fi
+  
+  if [[ -t 1 ]] && command -v tput >/dev/null 2>&1; then
+    local colors=$(tput colors 2>/dev/null || echo 0)
+    [[ $colors -ge 8 ]]
+  else
+    return 1
+  fi
+}
 
 # Función para mostrar el logo de CPCReady con colores y formato.
-# Uso: __cpcready_logo "cpc" "1.0.0"
 function __cpcready_logo() {
+  version=$(cat $CPCREADY_DIR/var/VERSION)
   echo ""
   echo "==========================================================================="
   echo
-  echo -e "${YELLOW_BOLD} ▞▀▖▛▀▖▞▀▖▛▀▖        ▌   ${RED}    ✴ ${GREEN}Created: ${RESET}© Destroyer 2025${RESET}" 
-  echo -e "${YELLOW_BOLD} ▌  ▙▄▘▌  ▙▄▘▞▀▖▝▀▖▞▀▌▌ ▌${RED}    ✴ ${GREEN}Version: ${RESET}$2${RESET}"
-  echo -e "${YELLOW_BOLD} ▌ ▖▌  ▌ ▖▌▚ ▛▀ ▞▀▌▌ ▌▚▄▌${RED}    ✴ ${GREEN}Github : ${RESET}https://github.com/CPCReady/cpc{RESET}"
-  echo -e "${YELLOW_BOLD} ▝▀ ▘  ▝▀ ▘ ▘▝▀▘▝▀▘▝▀▘▗▄▘${RED}    ✴ ${GREEN}Doc    : ${RESET}https://cpcready.readthedocs.io/${RESET}" 
+  
+  if __cpcready_supports_color; then
+    # Con colores
+    echo -e "\033[1;33m ▞▀▖▛▀▖▞▀▖▛▀▖        ▌   \033[31m    ✴ \033[32mCreated: \033[0m© Destroyer 2025\033[0m" 
+    echo -e "\033[1;33m ▌  ▙▄▘▌  ▙▄▘▞▀▖▝▀▖▞▀▌▌ ▌\033[31m    ✴ \033[32mVersion: \033[0m$version\033[0m"
+    echo -e "\033[1;33m ▌ ▖▌  ▌ ▖▌▚ ▛▀ ▞▀▌▌ ▌▚▄▌\033[31m    ✴ \033[32mGithub : \033[0mhttps://github.com/CPCReady\033[0m"
+    echo -e "\033[1;33m ▝▀ ▘  ▝▀ ▘ ▘▝▀▘▝▀▘▝▀▘▗▄▘\033[31m    ✴ \033[32mDoc    : \033[0mhttps://cpcready.readthedocs.io/\033[0m" 
+  else
+    # Sin colores
+    echo " ▞▀▖▛▀▖▞▀▖▛▀▖        ▌       ✴ Created: © Destroyer 2025" 
+    echo " ▌  ▙▄▘▌  ▙▄▘▞▀▖▝▀▖▞▀▌▌ ▌    ✴ Version: $version"
+    echo " ▌ ▖▌  ▌ ▖▌▚ ▛▀ ▞▀▌▌ ▌▚▄▌    ✴ Github : https://github.com/CPCReady"
+    echo " ▝▀ ▘  ▝▀ ▘ ▘▝▀▘▝▀▘▝▀▘▗▄▘    ✴ Doc    : https://cpcready.readthedocs.io/"
+  fi
+  
   echo ""
   echo "==========================================================================="
   echo
@@ -51,62 +71,62 @@ function __cpcready_logo() {
 # Uso: __cpcready_echo_red "Este es un mensaje de error"
 function __cpcready_echo_red() {
   local text="$1"
-  echo -e "\033[0;31m${text}\033[0m"
+  echo -e "\033[1;31m${text}\033[0m"
 }
 
-# Función para actualizar o añadir variables en un archivo de entorno.
-# Uso: update_env <archivo> VAR1=valor1 VAR2=valor2 ...
-update_env() {
-  local CPC_FILE="$1"
-  shift
+# # Función para actualizar o añadir variables en un archivo de entorno.
+# # Uso: update_env <archivo> VAR1=valor1 VAR2=valor2 ...
+# update_env() {
+#   local CPC_FILE="$1"
+#   shift
 
-  # Si no existe el archivo, lo creamos vacío
-  [ -f "$CPC_FILE" ] || touch "$CPC_FILE"
+#   # Si no existe el archivo, lo creamos vacío
+#   [ -f "$CPC_FILE" ] || touch "$CPC_FILE"
 
-  # Creamos fichero temporal en el mismo directorio
-  local TMP_FILE
-  TMP_FILE=$(mktemp "${CPC_FILE}.XXXXXX") || {
-    __cpcready_echo_red "Error: not could create temporary file"
-    return 1
-  }
+#   # Creamos fichero temporal en el mismo directorio
+#   local TMP_FILE
+#   TMP_FILE=$(mktemp "${CPC_FILE}.XXXXXX") || {
+#     __cpcready_echo_red "Error: not could create temporary file"
+#     return 1
+#   }
 
-  cp "$CPC_FILE" "$TMP_FILE"
+#   cp "$CPC_FILE" "$TMP_FILE"
 
-  for ARG in "$@"; do
-    if [[ "$ARG" != *=* ]]; then
-      __cpcready_echo_yellow "Ignoring invalid argument: $ARG"
-      continue
-    fi
+#   for ARG in "$@"; do
+#     if [[ "$ARG" != *=* ]]; then
+#       __cpcready_echo_yellow "Ignoring invalid argument: $ARG"
+#       continue
+#     fi
 
-    local KEY="${ARG%%=*}"
-    local VALUE="${ARG#*=}"
+#     local KEY="${ARG%%=*}"
+#     local VALUE="${ARG#*=}"
 
-    if grep -q "^${KEY}=" "$TMP_FILE"; then
-      # Reemplazar clave existente
-      sed -i "s|^${KEY}=.*|${KEY}=${VALUE}|" "$TMP_FILE"
-    else
-      # Añadir nueva clave
-      echo "${KEY}=${VALUE}" >> "$TMP_FILE"
-    fi
-  done
+#     if grep -q "^${KEY}=" "$TMP_FILE"; then
+#       # Reemplazar clave existente
+#       sed -i "s|^${KEY}=.*|${KEY}=${VALUE}|" "$TMP_FILE"
+#     else
+#       # Añadir nueva clave
+#       echo "${KEY}=${VALUE}" >> "$TMP_FILE"
+#     fi
+#   done
 
-  # Preservar permisos del original
-  chmod --reference="$CPC_FILE" "$TMP_FILE" 2>/dev/null || true
+#   # Preservar permisos del original
+#   chmod --reference="$CPC_FILE" "$TMP_FILE" 2>/dev/null || true
 
-  # Reemplazar original con el temporal
-  mv "$TMP_FILE" "$CPC_FILE"
+#   # Reemplazar original con el temporal
+#   mv "$TMP_FILE" "$CPC_FILE"
 
-  # Recargar direnv si existe
-  if command -v direnv &>/dev/null; then
-    direnv reload --quiet
-  fi
-}
+#   # Recargar direnv si existe
+#   if command -v direnv &>/dev/null; then
+#     direnv reload --quiet
+#   fi
+# }
 
 # Función para mostrar texto en color amarillo
 # Uso: __cpcready_echo_yellow "Este es un mensaje de advertencia"
 function __cpcready_echo_yellow() {
   local text="$1"
-  echo -e "\033[0;33m${text}\033[0m"
+  echo -e "\033[1;33m${text}\033[0m"
 }
 
 # Función para mostrar texto en color azul

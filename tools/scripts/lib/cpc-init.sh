@@ -27,7 +27,32 @@
 # Carga la librería de funciones comunes
 source "$CPCREADY_DIR/lib/cpc-common.sh"
 
+# Función principal para comando init
+function main() {
+  if [[ -f ".cpc" ]]; then
+    echo
+    __cpcready_echo_red "CPCReady project already exists in this directory."
+    echo
+    exit 1
+  fi
 
+  touch .cpc
+  # Create variables in .cpc
+  cpc-config .cpc DRIVE_SELECTED A
+  cpc-config .cpc DRIVE_A ""
+  cpc-config .cpc DRIVE_B ""
+  
+  echo "dotenv .cpc" > .envrc
+  direnv allow
+
+  gum spin --spinner dot --title "Initializing CPCReady project..." -- sleep 1
+  __cpcready_echo_green "CPCReady project initialized successfully."
+  echo
+
+  exit 0
+}
+
+# Manejo de argumentos
 case "$1" in
   ""|-h|--help)
     usage "init"
@@ -38,35 +63,6 @@ case "$1" in
     exit 0
     ;;
   init)
-    if [[ -f ".cpc" ]]; then
-      echo
-      echo "CPCReady project already exists in this directory."
-      echo
-      exit 1
-    fi
-    touch .cpc
-    echo "oaasdfas"
-    CONFIG_FILE=~/.config/direnv/direnv.toml
-    
-    if [[ -f "$CONFIG_FILE" ]]; then
-      cpc-ini set $CONFIG_FILE global log_filter '"^$"'
-    else
-      # Asegurarse de que el directorio y el fichero de configuración existen
-      mkdir -p "$(dirname "$CONFIG_FILE")"
-      touch "$CONFIG_FILE"
-      cpc-ini set $CONFIG_FILE global log_filter '"^$"'
-    fi
-    # if [ -f ~/.bashrc ]; then
-    #   echo 'eval "$(direnv hook bash)"' >> ~/.bashrc
-    # fi
-
-    # if [ -f ~/.zshrc ]; then
-    #   echo 'eval "$(direnv hook zsh)"' >> ~/.zshrc
-    # fi
-    echo "dotenv .cpc" > .envrc
-    direnv allow
-    cpc-update-var SELECTED_DRIVE=A
-    gum spin --spinner dot --title "Initializing CPCReady project..." -- sleep 1
-    exit 0
+    main
     ;;
 esac

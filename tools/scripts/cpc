@@ -24,65 +24,58 @@
 ##  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##--------------------------------------------------------------------------------
 
-# Determinar el directorio del script de forma compatible con bash y zsh
-if [[ -n "${BASH_SOURCE[0]}" ]]; then
-    # Estamos en bash
-    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-elif [[ -n "${(%):-%x}" ]]; then
-    # Estamos en zsh
-    SCRIPT_DIR="$(cd "$(dirname "${(%):-%x}")" && pwd)"
+# Load environment variables
+if [[ -f ".dev" ]]; then
+    source ".dev"
+    CPCREADY_LIB="$CPCREADY_DIR/lib/cpc-common.sh"
+    source "$CPCREADY_LIB"
+    echo
+    __cpcready_echo_yellow "******* DEV ENVIRONMENT *******"
 else
-    # Fallback para otros shells
-    SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+    CPCREADY_DIR="$(brew --prefix)/opt/cpcready-tools"
+    CPCREADY_LIB="$(brew --prefix)/opt/cpcready-tools/lib/cpc-common.sh"
+    source "$CPCREADY_LIB"
 fi
 
-if [[ -z "$SCRIPT_DIR" ]]; then
-    echo "Error: No se pudo determinar el directorio del script."
-    exit 1
-fi
-
-# if [[ -e ".dev" ]]; then
-#     echo "El fichero existe"
-# else
-#     echo "El fichero NO existe"
-# fi
-
-#CPC_COMMON="$(brew --prefix)/opt/cpcready-tools/libexec/cpc-common.sh"
-# CPC_COMMON="$SCRIPT_DIR/lib/cpc-common.sh"
-# echo "CPC_COMMON: $CPC_COMMON"
-export CPCREADY_DIR="$SCRIPT_DIR"
-source "$CPCREADY_DIR/lib/cpc-common.sh"
-# Función para mostrar ayuda
-
-
-# Verificar que se proporcionó al menos un argumento
+# Verify that at least one argument is provided
 if [ $# -eq 0 ]; then
     usage
     exit 1
 fi
 
-# Obtener el comando
 COMMAND="$1"
-shift  # Remover el primer argumento para pasar el resto al script
-
-# Construir la ruta del script (ahora busca en lib/ con el patrón cpc-*)
-SCRIPT_PATH="$CPCREADY_DIR/lib/cpc-${COMMAND}.sh"
-echo "SCRIPT_PATH: $SCRIPT_PATH"
-# Verificar que el script existe
-if [ ! -f "$SCRIPT_PATH" ]; then
-    echo ""
-    __cpcready_echo_red "Error: Command '$COMMAND' not found."
+case "$COMMAND" in
+  ""|-h|--help)
+    __cpcready_logo
     usage
-    exit 1
-fi
+    exit 0
+    ;;
+  -v|--version)
+    __cpcready_logo
+    echo "v$VERSION"
+    exit 0
+    ;;
+  *)
+    SCRIPT_PATH="$CPCREADY_DIR/lib/cpc-${COMMAND}.sh"
 
-# Verificar que el script es ejecutable
-if [ ! -x "$SCRIPT_PATH" ]; then
-    chmod +x "$SCRIPT_PATH"
-fi
+    # Verify that the script exists
+    if [ ! -f "$SCRIPT_PATH" ]; then
+        __cpcready_logo
+        __cpcready_echo_red "Error: Command '$COMMAND' not found."
+        usage
+        exit 1
+    fi
+    
+    # Verify that the script is executable
+    if [ ! -x "$SCRIPT_PATH" ]; then
+        chmod +x "$SCRIPT_PATH"
+    fi
 
-# Ejecutar el script correspondiente con los argumentos restantes
-# Usar bash explícitamente para mayor compatibilidad
-export CPCREADY_DIR
-bash "$SCRIPT_PATH" "$@"
+    # Execute the corresponding script with the remaining arguments
+    # Use bash explicitly for greater compatibility
+    export CPCREADY_DIR
+    bash "$SCRIPT_PATH" "$@"
+    ;;
+esac
 
+exit 0
