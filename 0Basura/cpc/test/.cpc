@@ -1,5 +1,0 @@
-DRIVE_A=disk_a.dsk
-DRIVE_B=disk_b.dsk
-SELECTED_DRIVE=A
-VERSION=0.1.0
-LICENSE=MIT
