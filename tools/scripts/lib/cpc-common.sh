@@ -191,7 +191,7 @@ function __load_config() {
 # Function to check if CPCREADY_PROJECT_CONFIG is set
 # Usage: __cpcready_check_project_config_is_set
 __cpcready_check_project_config_is_set() {
-  if [ -z "$CPCREADY_PROJECT_CONFIG" ]; then
+  if [ "$CPCREADY" != "$PROJECT" ]; then
     __cpcready_echo_red "Error: Project configuration CPCReady project not set."
     __cpcready_echo_red "Please run 'cpc init' to create a new project."
     return 1

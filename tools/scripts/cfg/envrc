@@ -1,0 +1,12 @@
+dotenv .cpc
+if [ -z "$DIRENV_CPC_LOADED" ]; then
+    clear
+    echo
+    echo -e "\033[1;33m ▞▀▖▛▀▖▞▀▖▛▀▖        ▌   \033[31m " 
+    echo -e "\033[1;33m ▌  ▙▄▘▌  ▙▄▘▞▀▖▝▀▖▞▀▌▌ ▌\033[31m "
+    echo -e "\033[1;33m ▌ ▖▌  ▌ ▖▌▚ ▛▀ ▞▀▌▌ ▌▚▄▌\033[31m "
+    echo -e "\033[1;33m ▝▀ ▘  ▝▀ ▘ ▘▝▀▘▝▀▘▝▀▘▗▄▘\033[31m " 
+    echo -e "\033[1;32m ✅ Activated\033[0m"
+    export DIRENV_CPC_LOADED=1
+    echo
+fi

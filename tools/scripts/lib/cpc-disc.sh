@@ -24,38 +24,42 @@
 ##  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##--------------------------------------------------------------------------------
 
-# Displays the help message for the script.
-__display_help() {
+# Carga la librería de funciones comunes
+source "$CPCREADY_DIR/lib/cpc-common.sh"
+
+# Función principal para comando init
+function main() {
+
+  # Check if a project configuration is loaded.
   echo
-  echo "Usage: cpc disc [options] [disc_name]"
-  echo
-  echo "Manage virtual discs for the project. ."
-  echo
-  echo "Options:"
-  echo "  -h, --help    Show this help message."
-  echo
-  echo "Arguments:"
-  echo "  disc_name     The name of the virtual disc file. If the extension is not provided, '.dsk' will be added."
-  echo "                If the disc file exists, you will be prompted to overwrite it."
-  echo
-  echo "If no arguments are provided, it sets the storage_select to DISC in the project configuration."
-  echo
+  __cpcready_check_project_config_is_set
+  if [ $? -ne 0 ]; then
+    echo
+    return 1
+  fi
+  
 }
+
+# Manejo de argumentos
+case "$1" in
+  ""|-h|--help)
+    usage "init"
+    exit 0
+    ;;
+  -v|--version)
+    echo "v$VERSION"
+    exit 0
+    ;;
+  init)
+    main
+    ;;
+esac
+
+exit
+
 
 # Main function of the script.
 main() {
-  # Check for help flags.
-  if [[ "$1" == "-h" || "$1" == "--help" ]]; then
-    __display_help
-    return 0
-  fi
-
-  # Load common functions.
-  source "$CPCREADY_DIR/lib/cpc-common.sh"
-
-  # Set the path for the iDSK utility.
-  IDSK="$CPCREADY_DIR/opt/idsk"
-  YQ="$CPCREADY_DIR/opt/yq"
 
   # Check if a project configuration is loaded.
   echo

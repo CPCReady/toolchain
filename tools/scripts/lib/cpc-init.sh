@@ -38,11 +38,13 @@ function main() {
 
   touch .cpc
   # Create variables in .cpc
+  cpc-config .cpc CPCREADY PROJECT
   cpc-config .cpc DRIVE_SELECTED A
   cpc-config .cpc DRIVE_A ""
   cpc-config .cpc DRIVE_B ""
   
-  echo "dotenv .cpc" > .envrc
+  cp "$CPCREADY_DIR/cfg/envrc" .envrc
+  # Activate direnv
   direnv allow
 
   gum spin --spinner dot --title "Initializing CPCReady project..." -- sleep 1
