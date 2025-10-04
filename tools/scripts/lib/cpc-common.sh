@@ -67,6 +67,12 @@ function __cpcready_logo() {
   echo
 }
 
+# Función para obtener la ruta del proyecto actual usando direnv
+# Uso: __cpcready_path
+function __cpcready_path() {
+    dirname "$(direnv status | grep 'Loaded RC path' | awk '{print $4}')"
+}
+
 # Función para imprimir texto en color rojo.
 # Uso: __cpcready_echo_red "Este es un mensaje de error"
 function __cpcready_echo_red() {

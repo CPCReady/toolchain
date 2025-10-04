@@ -33,11 +33,16 @@ function main() {
   local DRIVE="$1"
   local DISC_NAME="$2"
 
+  DRIVE=$(echo "$DRIVE" | tr '[:lower:]' '[:upper:]')
+
   # Check if a project configuration is loaded.
   __cpcready_check_project_config_is_set
 
+  # Obtenemos la ruta del fichero de configuracion del proyecto actual
+  CPCREADY_PROJECT_CONFIG="$(__cpcready_path)/.cpc"
+
   if [[ -z "$DISC_NAME" ]]; then
-    cpc-config .cpc DRIVE_SELECT $DRIVE
+    cpc-config $CPCREADY_PROJECT_CONFIG DRIVE_SELECT $DRIVE
     __cpcready_echo_green "Drive $DRIVE selected."
   fi
 }
