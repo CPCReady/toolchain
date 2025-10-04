@@ -29,19 +29,21 @@ source "$CPCREADY_DIR/lib/cpc-common.sh"
 
 # Función principal para comando init
 function main() {
-  local DRIVE="$1"
 
+  local DRIVE="$1"
+  local DISC_NAME="$2"
+
+  # Check if a project configuration is loaded.
   __cpcready_check_project_config_is_set
-    echo "Creating a new disc in drive $DRIVE"
+
+  if [[ -z "$DISC_NAME" ]]; then
+    cpc-config .cpc DRIVE_SELECT $DRIVE
+    __cpcready_echo_green "Drive $DRIVE selected."
+  fi
 }
 
-# Manejo de argumentos
-
 case "$1" in
-  A|a)
-    main "$1"
-    ;;
-  B|b)
+  A|a|B|b)
     main "$1"
     ;;
   ""|-h|--help)

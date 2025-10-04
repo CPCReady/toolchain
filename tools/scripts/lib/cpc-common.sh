@@ -325,7 +325,6 @@ function usage() {
     esac
   else
     # Mostrar ayuda general
-    echo ""
     echo "Usage: cpc <command> [arguments...]"
     echo ""
     echo "CPCReady - Toolchain for Amstrad CPC development"

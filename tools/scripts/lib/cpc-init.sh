@@ -39,7 +39,7 @@ function main() {
   touch .cpc
   # Create variables in .cpc
   cpc-config .cpc CPCREADY PROJECT
-  cpc-config .cpc DRIVE_SELECTED A
+  cpc-config .cpc DRIVE_SELECT A
   cpc-config .cpc DRIVE_A ""
   cpc-config .cpc DRIVE_B ""
   
