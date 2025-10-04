@@ -33,12 +33,12 @@
       __cpcready_echo_yellow "******* DEV ENVIRONMENT *******"
       echo
   else
-      # CPCREADY_DIR="$(brew --prefix)/opt/cpcready-tools"
-      # CPCREADY_LIB="$(brew --prefix)/opt/cpcready-tools/lib/cpc-common.sh"
-      # source "$CPCREADY_LIB"
-      CPCREADY_DIR="/Users/destroyer/PROJECTS/CPCReady3/toolchain/tools/scripts"
-      CPCREADY_LIB="$CPCREADY_DIR/lib/cpc-common.sh"
+      CPCREADY_DIR="$(brew --prefix)/opt/cpcready-tools"
+      CPCREADY_LIB="$(brew --prefix)/opt/cpcready-tools/lib/cpc-common.sh"
       source "$CPCREADY_LIB"
+      # CPCREADY_DIR="/Users/destroyer/PROJECTS/CPCReady3/toolchain/tools/scripts"
+      # CPCREADY_LIB="$CPCREADY_DIR/lib/cpc-common.sh"
+      # source "$CPCREADY_LIB"
       echo
   fi
 
