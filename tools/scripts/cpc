@@ -1,10 +1,28 @@
-#!/usr/bin/env bash
-
-# CPC Wrapper Script
-# Permite ejecutar comandos cpc-* pasando el nombre del comando como parámetro
-# Uso: cpc <comando> [argumentos...]
-# Ejemplo: cpc version, cpc help, cpc disc, etc.
-# Compatible con bash y zsh
+#!/bin/bash
+##--------------------------------------------------------------------------------
+##
+##   ▞▀▖▛▀▖▞▀▖▛▀▖        ▌      Created....: © Destroyer 2025
+##   ▌  ▙▄▘▌  ▙▄▘▞▀▖▝▀▖▞▀▌▌ ▌   Description: Toolchain for Amstrad CPC.
+##   ▌ ▖▌  ▌ ▖▌▚ ▛▀ ▞▀▌▌ ▌▚▄▌   Github.....: https://github.com/CPCReady
+##   ▝▀ ▘  ▝▀ ▘ ▘▝▀▘▝▀▘▝▀▘▗▄▘   Doc........: https://cpcready.readthedocs.io/  
+##
+##-----------------------------LICENSE NOTICE--------------------------------------
+##  This file is part of CPCReady Basic programation.
+##  Copyright (C) 2025 Destroyer
+##
+##  This program is free software: you can redistribute it and/or modify
+##  it under the terms of the GNU Lesser General Public License as published by
+##  the Free Software Foundation, either version 3 of the License, or
+##  (at your option) any later version.
+##
+##  This program is distributed in the hope that it will be useful,
+##  but WITHOUT ANY WARRANTY; without even the implied warranty of
+##  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+##  GNU Lesser General Public License for more details.
+##
+##  You should have received a copy of the GNU Lesser General Public License
+##  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+##--------------------------------------------------------------------------------
 
 # Determinar el directorio del script de forma compatible con bash y zsh
 if [[ -n "${BASH_SOURCE[0]}" ]]; then
@@ -23,36 +41,23 @@ if [[ -z "$SCRIPT_DIR" ]]; then
     exit 1
 fi
 
-if [[ -e ".dev" ]]; then
-    echo "El fichero existe"
-else
-    echo "El fichero NO existe"
-fi
+# if [[ -e ".dev" ]]; then
+#     echo "El fichero existe"
+# else
+#     echo "El fichero NO existe"
+# fi
 
 #CPC_COMMON="$(brew --prefix)/opt/cpcready-tools/libexec/cpc-common.sh"
-
+# CPC_COMMON="$SCRIPT_DIR/lib/cpc-common.sh"
+# echo "CPC_COMMON: $CPC_COMMON"
 export CPCREADY_DIR="$SCRIPT_DIR"
-
+source "$CPCREADY_DIR/lib/cpc-common.sh"
 # Función para mostrar ayuda
-show_usage() {
-    echo "Usage: cpc <command> [arguments...]"
-    echo ""
-    echo "Available commands:"
-    echo "  commands   - List available commands"
-    echo "  disc       - Create a virtual disk"
-    echo "  help       - Show help message"
-    echo "  run        - Run a program in the emulator"
-    echo "  save       - Save a file to the virtual disk"
-    echo "  version    - Show version information"  
-    echo ""
-    echo "Example: cpc version"
-    echo "Example: cpc help"
-    echo "Example: cpc save myfile.bas"
-}
+
 
 # Verificar que se proporcionó al menos un argumento
 if [ $# -eq 0 ]; then
-    show_usage
+    usage
     exit 1
 fi
 
@@ -62,12 +67,12 @@ shift  # Remover el primer argumento para pasar el resto al script
 
 # Construir la ruta del script (ahora busca en lib/ con el patrón cpc-*)
 SCRIPT_PATH="$CPCREADY_DIR/lib/cpc-${COMMAND}.sh"
-
+echo "SCRIPT_PATH: $SCRIPT_PATH"
 # Verificar que el script existe
 if [ ! -f "$SCRIPT_PATH" ]; then
-    echo "Error: Command '$COMMAND' not found."
     echo ""
-    show_usage
+    __cpcready_echo_red "Error: Command '$COMMAND' not found."
+    usage
     exit 1
 fi
 

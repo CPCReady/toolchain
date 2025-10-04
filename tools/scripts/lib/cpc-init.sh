@@ -3,7 +3,7 @@
 ##
 ##   ▞▀▖▛▀▖▞▀▖▛▀▖        ▌      Created....: © Destroyer 2025
 ##   ▌  ▙▄▘▌  ▙▄▘▞▀▖▝▀▖▞▀▌▌ ▌   Description: Toolchain for Amstrad CPC.
-##   ▌ ▖▌  ▌ ▖▌▚ ▛▀ ▞▀▌▌ ▌▚▄▌   Github.....: https://github.com/orgs/CPCReady
+##   ▌ ▖▌  ▌ ▖▌▚ ▛▀ ▞▀▌▌ ▌▚▄▌   Github.....: https://github.com/CPCReady
 ##   ▝▀ ▘  ▝▀ ▘ ▘▝▀▘▝▀▘▝▀▘▗▄▘   Doc........: https://cpcready.readthedocs.io/  
 ##
 ##-----------------------------LICENSE NOTICE--------------------------------------
@@ -24,11 +24,13 @@
 ##  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##--------------------------------------------------------------------------------
 
-echo "Initializing CPC environment..."
+# Carga la librería de funciones comunes
+source "$CPCREADY_DIR/lib/cpc-common.sh"
+
 
 case "$1" in
   ""|-h|--help)
-    usage
+    usage "init"
     exit 0
     ;;
   -v|--version)
@@ -43,26 +45,16 @@ case "$1" in
       exit 1
     fi
     touch .cpc
-
+    echo "oaasdfas"
     CONFIG_FILE=~/.config/direnv/direnv.toml
+    
     if [[ -f "$CONFIG_FILE" ]]; then
-      # Primero, comprobar si la línea 'log_filter' ya existe para no duplicarla
-      if ! grep -q 'log_filter="^$"' "$CONFIG_FILE"; then
-        # Si no existe, comprobar si la sección '[global]' existe
-        if grep -q '^\\[global\\]' "$CONFIG_FILE"; then
-          # Si '[global]' existe, insertar 'log_filter' justo debajo
-          sed -i '/^\\[global\\]/a log_filter="^$"' "$CONFIG_FILE"
-        else
-          # Si '[global]' no existe, añadir la sección y la línea al final del fichero
-          echo -e "\n[global]\nlog_filter=\"^$\"" >> "$CONFIG_FILE"
-        fi
-      fi
+      cpc-ini set $CONFIG_FILE global log_filter '"^$"'
     else
       # Asegurarse de que el directorio y el fichero de configuración existen
       mkdir -p "$(dirname "$CONFIG_FILE")"
       touch "$CONFIG_FILE"
-      echo "[global]" > ~/.config/direnv/direnv.toml
-      echo 'log_filter="^$"' >> ~/.config/direnv/direnv.toml
+      cpc-ini set $CONFIG_FILE global log_filter '"^$"'
     fi
     # if [ -f ~/.bashrc ]; then
     #   echo 'eval "$(direnv hook bash)"' >> ~/.bashrc

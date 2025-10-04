@@ -40,7 +40,7 @@ function __cpcready_logo() {
   echo
   echo -e "${YELLOW_BOLD} ▞▀▖▛▀▖▞▀▖▛▀▖        ▌   ${RED}    ✴ ${GREEN}Created: ${RESET}© Destroyer 2025${RESET}" 
   echo -e "${YELLOW_BOLD} ▌  ▙▄▘▌  ▙▄▘▞▀▖▝▀▖▞▀▌▌ ▌${RED}    ✴ ${GREEN}Version: ${RESET}$2${RESET}"
-  echo -e "${YELLOW_BOLD} ▌ ▖▌  ▌ ▖▌▚ ▛▀ ▞▀▌▌ ▌▚▄▌${RED}    ✴ ${GREEN}Github : ${RESET}https://github.com/CPCReady/$1${RESET}"
+  echo -e "${YELLOW_BOLD} ▌ ▖▌  ▌ ▖▌▚ ▛▀ ▞▀▌▌ ▌▚▄▌${RED}    ✴ ${GREEN}Github : ${RESET}https://github.com/CPCReady/cpc{RESET}"
   echo -e "${YELLOW_BOLD} ▝▀ ▘  ▝▀ ▘ ▘▝▀▘▝▀▘▝▀▘▗▄▘${RED}    ✴ ${GREEN}Doc    : ${RESET}https://cpcready.readthedocs.io/${RESET}" 
   echo ""
   echo "==========================================================================="
@@ -175,5 +175,156 @@ __cpcready_check_project_config_is_set() {
     __cpcready_echo_red "Error: Project configuration CPCReady project not set."
     __cpcready_echo_red "Please run 'cpc init' to create a new project."
     return 1
+  fi
+}
+
+# Función para mostrar el uso general del comando CPC
+# Uso: usage [comando_especifico]
+function usage() {
+  local command="${1:-}"
+  
+  if [[ -n "$command" ]]; then
+    # Mostrar ayuda específica para un comando
+    case "$command" in
+      "init")
+        echo ""
+        echo "Usage: cpc init [options]"
+        echo ""
+        echo "Initialize a new CPCReady project in the current directory."
+        echo ""
+        echo "Options:"
+        echo "  -h, --help     Show this help message"
+        echo "  -v, --version  Show version information"
+        echo ""
+        echo "Examples:"
+        echo "  cpc init        # Initialize project in current directory"
+        echo "  cpc init --help # Show this help"
+        echo ""
+        ;;
+      "save")
+        echo ""
+        echo "Usage: cpc save <filename> [options]"
+        echo ""
+        echo "Save a file to the virtual disk."
+        echo ""
+        echo "Options:"
+        echo "  -h, --help     Show this help message"
+        echo "  -v, --verbose  Verbose output"
+        echo "  -d, --dest      Custom destination directory"
+        echo ""
+        echo "Examples:"
+        echo "  cpc save myfile.bas"
+        echo "  cpc save myfile.bin --verbose"
+        echo "  cpc save myfile.txt --dest /custom/path/"
+        echo ""
+        ;;
+      "run")
+        echo ""
+        echo "Usage: cpc run <program> [options]"
+        echo ""
+        echo "Run a program in the CPC emulator."
+        echo ""
+        echo "Options:"
+        echo "  -h, --help     Show this help message"
+        echo "  -v, --verbose  Verbose output"
+        echo "  -d, --debug    Enable debug mode"
+        echo "  -e, --emulator Specify emulator to use"
+        echo ""
+        echo "Examples:"
+        echo "  cpc run myprogram.bin"
+        echo "  cpc run game.bas --verbose"
+        echo "  cpc run code.bin --debug --emulator custom"
+        echo ""
+        ;;
+      "disc")
+        echo ""
+        echo "Usage: cpc disc [options] [disc_name]"
+        echo ""
+        echo "Create and manage virtual disks."
+        echo ""
+        echo "Options:"
+        echo "  -h, --help     Show this help message"
+        echo "  -v, --verbose  Verbose output"
+        echo "  -s, --size     Disk size (default: 360K)"
+        echo "  -f, --format   Disk format (default: dsk)"
+        echo ""
+        echo "Examples:"
+        echo "  cpc disc mydisk          # Create mydisk.dsk"
+        echo "  cpc disc --help          # Show this help"
+        echo "  cpc disc game --size 720K # Create 720K disk"
+        echo ""
+        ;;
+      "version")
+        echo ""
+        echo "Usage: cpc version [options]"
+        echo ""
+        echo "Show version information."
+        echo ""
+        echo "Options:"
+        echo "  -h, --help     Show this help message"
+        echo "  -v, --verbose  Show detailed version information"
+        echo ""
+        echo "Examples:"
+        echo "  cpc version"
+        echo "  cpc version --verbose"
+        echo ""
+        ;;
+      "help")
+        echo ""
+        echo "Usage: cpc help [command]"
+        echo ""
+        echo "Show help information."
+        echo ""
+        echo "Options:"
+        echo "  -h, --help     Show this help message"
+        echo ""
+        echo "Examples:"
+        echo "  cpc help"
+        echo "  cpc help save"
+        echo "  cpc help run"
+        echo ""
+        ;;
+      "commands")
+        echo ""
+        echo "Usage: cpc commands"
+        echo ""
+        echo "List all available commands."
+        echo ""
+        echo "Examples:"
+        echo "  cpc commands" 
+        echo ""
+        ;;
+      *)
+        echo "Usage: cpc $command [options]"
+        echo ""
+        echo "For detailed help on this command, use: cpc $command --help"
+        echo ""
+        ;;
+    esac
+  else
+    # Mostrar ayuda general
+    echo ""
+    echo "Usage: cpc <command> [arguments...]"
+    echo ""
+    echo "CPCReady - Toolchain for Amstrad CPC development"
+    echo ""
+    echo "Available commands:"
+    echo "  commands   - List available commands"
+    echo "  disc       - Create a virtual disk"
+    echo "  help       - Show help message"
+    echo "  init       - Initialize a new project"
+    echo "  run        - Run a program in the emulator"
+    echo "  save       - Save a file to the virtual disk"
+    echo "  version    - Show version information"
+    echo ""
+    echo "For more details on a specific command, use: cpc <command> --help"
+    echo ""
+    echo "Examples:"
+    echo "  cpc version"
+    echo "  cpc help"
+    echo "  cpc save myfile.bas"
+    echo "  cpc run myprogram.bin"
+    echo "  cpc disc mydisk"
+    echo ""
   fi
 }
