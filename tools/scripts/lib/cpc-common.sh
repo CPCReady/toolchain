@@ -174,27 +174,29 @@ function __file_exists() {
 function __get_version(){
   version=$(cat $CPCREADY_DIR/var/VERSION)
   echo "CPCReady: $version"
+  echo
 }
 
 # Función para cargar la configuración desde .cpcready.yml
 # y exportarla como variables de entorno.
 # Uso: __load_config
-function __load_config() {
-  local config_file="$CPCREADY_DIR/.cpcready.yml"
-  if [[ ! -f "$config_file" ]]; then
-    __cpcready_echo_red "Error: Fichero de configuración no encontrado en '$config_file'"
-    return 1
-  fi
-  eval $(yq '. as $item | keys | .[] | "export \(. )=\"\($item[.]\)\""' "$config_file")
-}
+# function __load_config() {
+#   local config_file="$CPCREADY_DIR/.cpcready.yml"
+#   if [[ ! -f "$config_file" ]]; then
+#     __cpcready_echo_red "Error: Fichero de configuración no encontrado en '$config_file'"
+#     return 1
+#   fi
+#   eval $(yq '. as $item | keys | .[] | "export \(. )=\"\($item[.]\)\""' "$config_file")
+# }
 
 # Function to check if CPCREADY_PROJECT_CONFIG is set
 # Usage: __cpcready_check_project_config_is_set
 __cpcready_check_project_config_is_set() {
-  if [ "$CPCREADY" != "$PROJECT" ]; then
+  if [ "$CPCREADY" != "PROJECT" ]; then
     __cpcready_echo_red "Error: Project configuration CPCReady project not set."
     __cpcready_echo_red "Please run 'cpc init' to create a new project."
-    return 1
+    echo
+    exit 1
   fi
 }
 

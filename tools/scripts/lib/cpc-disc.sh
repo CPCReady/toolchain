@@ -29,99 +29,32 @@ source "$CPCREADY_DIR/lib/cpc-common.sh"
 
 # Función principal para comando init
 function main() {
+  local DRIVE="$1"
 
-  # Check if a project configuration is loaded.
-  echo
   __cpcready_check_project_config_is_set
-  if [ $? -ne 0 ]; then
-    echo
-    return 1
-  fi
-  
+    echo "Creating a new disc in drive $DRIVE"
 }
 
 # Manejo de argumentos
+
 case "$1" in
+  A|a)
+    main "$1"
+    ;;
+  B|b)
+    main "$1"
+    ;;
   ""|-h|--help)
-    usage "init"
+    usage "disc"
     exit 0
     ;;
   -v|--version)
-    echo "v$VERSION"
+    __get_version
+
     exit 0
     ;;
-  init)
-    main
+  *)
+    usage "disc"
+    exit 0
     ;;
 esac
-
-exit
-
-
-# Main function of the script.
-main() {
-
-  # Check if a project configuration is loaded.
-  echo
-  __cpcready_check_project_config_is_set
-  if [ $? -ne 0 ]; then
-    echo
-    return 1
-  fi
-
-  # If no argument is provided, set storage_select to DISC.
-  if [ -z "$1" ]; then
-    if $YQ -i '.storage_select = "DISC"' "$CPCREADY_PROJECT_CONFIG"; then
-      echo "Disc Ready"
-      echo
-    else
-      __cpcready_echo_red "Error modifying the configuration file."
-      echo
-      return 1
-    fi
-
-  else
-    # An argument is provided, so we are creating a disc.
-    # Convert the disc name to uppercase.
-    VIRTUAL_DISC=$(echo "$1" | tr '[:lower:]' '[:upper:]')
-    
-    # Add .dsk extension if not present.
-    if [[ "$VIRTUAL_DISC" != *.DSK ]]; then
-      VIRTUAL_DISC="${VIRTUAL_DISC}.dsk"
-    fi
-
-    # Check if the disc file already exists.
-    if [ -f "$VIRTUAL_DISC" ]; then
-      # File exists, ask to overwrite.
-      if gum confirm "Disc file '$VIRTUAL_DISC' already exists. Overwrite?"; then
-        # Overwrite confirmed, create the disc.
-        if $IDSK "$VIRTUAL_DISC" -n -f; then
-          echo "Disc $VIRTUAL_DISC createdw"
-          echo
-        else
-          __cpcready_echo_red "Error: Could not set virtual disc to '$VIRTUAL_DISC'."
-          return 1
-        fi
-      else
-        # Overwrite denied.
-        __cpcready_echo_red "Disc file not created."
-        echo
-        return 1
-      fi
-    else
-      # File does not exist, create it.
-      if $IDSK "$VIRTUAL_DISC" -n -f; then
-        echo "Disc $VIRTUAL_DISC created"
-        echo
-      else
-        __cpcready_echo_red "Error: Could not create virtual disc '$VIRTUAL_DISC'."
-        echo
-        return 1
-      fi
-    fi
-
-  fi
-}
-
-# Run the main function with all script arguments.
-main "$@"

@@ -54,9 +54,11 @@ function main() {
   exit 0
 }
 
-# Manejo de argumentos
 case "$1" in
-  ""|-h|--help)
+  "")
+    main
+    ;;
+  -h|--help)
     usage "init"
     exit 0
     ;;
@@ -64,7 +66,8 @@ case "$1" in
     echo "v$VERSION"
     exit 0
     ;;
-  init)
-    main
+  *)
+    usage "init"
+    exit 0
     ;;
 esac

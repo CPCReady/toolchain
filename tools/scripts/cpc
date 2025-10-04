@@ -24,58 +24,67 @@
 ##  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##--------------------------------------------------------------------------------
 
-# Load environment variables
-if [[ -f ".dev" ]]; then
-    source ".dev"
-    CPCREADY_LIB="$CPCREADY_DIR/lib/cpc-common.sh"
-    source "$CPCREADY_LIB"
-    echo
-    __cpcready_echo_yellow "******* DEV ENVIRONMENT *******"
-else
-    CPCREADY_DIR="$(brew --prefix)/opt/cpcready-tools"
-    CPCREADY_LIB="$(brew --prefix)/opt/cpcready-tools/lib/cpc-common.sh"
-    source "$CPCREADY_LIB"
-fi
+  # Load environment variables
+  if [[ -f ".dev" ]]; then
+      source ".dev"
+      CPCREADY_LIB="$CPCREADY_DIR/lib/cpc-common.sh"
+      source "$CPCREADY_LIB"
+      echo
+      __cpcready_echo_yellow "******* DEV ENVIRONMENT *******"
+      echo
+  else
+      # CPCREADY_DIR="$(brew --prefix)/opt/cpcready-tools"
+      # CPCREADY_LIB="$(brew --prefix)/opt/cpcready-tools/lib/cpc-common.sh"
+      # source "$CPCREADY_LIB"
+      CPCREADY_DIR="/Users/destroyer/PROJECTS/CPCReady3/toolchain/tools/scripts"
+      CPCREADY_LIB="$CPCREADY_DIR/lib/cpc-common.sh"
+      source "$CPCREADY_LIB"
+      echo
+  fi
 
-# Verify that at least one argument is provided
-if [ $# -eq 0 ]; then
-    usage
-    exit 1
-fi
-
-COMMAND="$1"
-case "$COMMAND" in
-  ""|-h|--help)
-    __cpcready_logo
-    usage
-    exit 0
-    ;;
-  -v|--version)
-    __cpcready_logo
-    echo "v$VERSION"
-    exit 0
-    ;;
-  *)
-    SCRIPT_PATH="$CPCREADY_DIR/lib/cpc-${COMMAND}.sh"
-
-    # Verify that the script exists
-    if [ ! -f "$SCRIPT_PATH" ]; then
-        __cpcready_logo
-        __cpcready_echo_red "Error: Command '$COMMAND' not found."
-        usage
-        exit 1
-    fi
-    
-    # Verify that the script is executable
-    if [ ! -x "$SCRIPT_PATH" ]; then
-        chmod +x "$SCRIPT_PATH"
+  COMMAND="$1"
+    # Remueve el primer argumento para pasar el resto solo si hay argumentos
+    if [ "$#" -gt 0 ]; then
+      shift
     fi
 
-    # Execute the corresponding script with the remaining arguments
-    # Use bash explicitly for greater compatibility
-    export CPCREADY_DIR
-    bash "$SCRIPT_PATH" "$@"
-    ;;
-esac
-
-exit 0
+  # Usa una estructura 'case' para redirigir a los scripts correctos
+  case "$COMMAND" in
+    ""|-h|--help)
+      __cpcready_logo
+      usage
+      exit 0
+      ;;
+    -v|--version)
+      __cpcready_logo
+      echo "v$VERSION"
+      exit 0
+      ;;
+    "save")
+      source "$CPCREADY_DIR/lib/cpc-save.sh" "$@"
+      ;;
+    "run")
+      source "$CPCREADY_DIR/lib/cpc-run.sh" "$@"
+      ;;
+    "disc")
+      source "$CPCREADY_DIR/lib/cpc-disc.sh" "$@"
+      ;;
+    "version")
+      source "$CPCREADY_DIR/lib/cpc-version.sh" "$@"
+      ;;
+    "init")
+      source "$CPCREADY_DIR/lib/cpc-init.sh" "$@"
+      ;;
+    "logo")
+      source "$CPCREADY_DIR/ec/logo.sh"
+      ;;
+    "commands")
+      source "$CPCREADY_LIB/cpc-commands.sh" "$@"
+      ;;  
+    *)
+      __cpcready_logo
+      __cpcready_echo_red "Error: Unknown command:$COMMAND"
+      usage
+      exit 1
+      ;;
+  esac
