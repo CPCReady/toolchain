@@ -1,0 +1,120 @@
+#!/bin/bash
+##--------------------------------------------------------------------------------
+##
+##   ▞▀▖▛▀▖▞▀▖▛▀▖        ▌      Created....: © Destroyer 2025
+##   ▌  ▙▄▘▌  ▙▄▘▞▀▖▝▀▖▞▀▌▌ ▌   Description: Toolchain for Amstrad CPC.
+##   ▌ ▖▌  ▌ ▖▌▚ ▛▀ ▞▀▌▌ ▌▚▄▌   Github.....: https://github.com/CPCReady
+##   ▝▀ ▘  ▝▀ ▘ ▘▝▀▘▝▀▘▝▀▘▗▄▘   Doc........: https://cpcready.readthedocs.io/  
+##
+##-----------------------------LICENSE NOTICE--------------------------------------
+##  This file is part of CPCReady Basic programation.
+##  Copyright (C) 2025 Destroyer
+##
+##  This program is free software: you can redistribute it and/or modify
+##  it under the terms of the GNU Lesser General Public License as published by
+##  the Free Software Foundation, either version 3 of the License, or
+##  (at your option) any later version.
+##
+##  This program is distributed in the hope that it will be useful,
+##  but WITHOUT ANY WARRANTY; without even the implied warranty of
+##  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+##  GNU Lesser General Public License for more details.
+##
+##  You should have received a copy of the GNU Lesser General Public License
+##  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+##--------------------------------------------------------------------------------
+  set -euo pipefail
+
+  #------------------------------------------------------------
+  # Detecta si se llamó como "cpc" o "cpc-<comando>"
+  #------------------------------------------------------------
+  BASENAME="$(basename "$0")"
+  if [[ "$BASENAME" == cpc-* ]]; then
+    COMMAND="${BASENAME#cpc-}"
+  else
+    COMMAND="${1:-}"
+    shift || true
+  fi
+
+  # Obtener la ruta base usando brew --prefix
+  BREW_PREFIX="$(brew --prefix 2>/dev/null)"
+  
+  if [[ -z "$BREW_PREFIX" ]]; then
+      echo "Error: Could not determine brew prefix"
+      echo "Please ensure brew is installed and accessible"
+      exit 1
+  fi
+  
+  # Configurar rutas basándose en brew --prefix
+  CPCREADY_DIR="$BREW_PREFIX"
+  CPCREADY_LIB="$CPCREADY_DIR/lib/cpc-common.sh"
+  
+  # Verificar que las librerías existen
+  if [[ ! -f "$CPCREADY_LIB" ]]; then
+      echo "Error: CPCReady libraries not found in $CPCREADY_LIB"
+      echo "Please ensure CPCReady is properly installed"
+      exit 1
+  fi
+  
+  source "$CPCREADY_LIB"
+  echo
+
+  # Función para mostrar la ayuda
+  usage() {
+      echo
+      echo "Usage: cpc <command> [arguments...]"
+      echo
+      echo "CPCReady - Toolchain for Amstrad CPC development"
+      echo
+      echo "Available commands:"
+      echo "  disc       - Create a virtual disk"
+      echo "  run        - Run a program in the emulator"
+      echo "  save       - Save a file to the virtual disk"
+      echo "  version    - Show version information"
+      echo
+      echo "For more details on a specific command, use: cpc <command> --help"
+      echo
+      echo "Examples:"
+      echo "  cpc version"
+      echo "  cpc save myfile.bas"
+      echo "  cpc run myprogram.bin"
+      echo "  cpc disc mydisk"
+      echo
+  }
+
+  # ...existing code...
+
+  # Usa una estructura 'case' para redirigir a los scripts correctos
+  case "$COMMAND" in
+    ""|-h|--help|help)
+      __cpcready_logo
+      usage
+      exit 0
+      ;;
+    -v|--version)
+      __cpcready_logo
+      __get_version
+      exit 0
+      ;;
+    "save")
+      source "$CPCREADY_DIR/lib/cpc-save.sh" "$@"
+      ;;
+    "run")
+      source "$CPCREADY_DIR/lib/cpc-run.sh" "$@"
+      ;;
+    "disc")
+      source "$CPCREADY_DIR/lib/cpc-disc.sh" "$@"
+      ;;
+    "version")
+      source "$CPCREADY_DIR/lib/cpc-version.sh" "$@"
+      ;;
+    "logo")
+      __cpcready_logo
+      ;;
+    *)
+      __cpcready_logo
+      __cpcready_echo_red "Error: Unknown command:$COMMAND"
+      usage
+      exit 1
+      ;;
+  esac

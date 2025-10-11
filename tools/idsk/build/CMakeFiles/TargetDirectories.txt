@@ -1,3 +1,0 @@
-/Users/destroyer/PROJECTS/CPCReady3/toolchain/tools/idsk/build/CMakeFiles/iDSK.dir
-/Users/destroyer/PROJECTS/CPCReady3/toolchain/tools/idsk/build/CMakeFiles/edit_cache.dir
-/Users/destroyer/PROJECTS/CPCReady3/toolchain/tools/idsk/build/CMakeFiles/rebuild_cache.dir

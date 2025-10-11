@@ -1,0 +1,14 @@
+#!/bin/bash
+if [[ "$1" == "--prefix" ]]; then
+    echo "$CPCREADY_DIR"
+else
+    # Buscar el brew real en el sistema
+    if [[ -x "/opt/homebrew/bin/brew" ]]; then
+        /opt/homebrew/bin/brew "$@"
+    elif [[ -x "/usr/local/bin/brew" ]]; then
+        /usr/local/bin/brew "$@"
+    else
+        echo "Error: brew not found" >&2
+        exit 1
+    fi
+fi

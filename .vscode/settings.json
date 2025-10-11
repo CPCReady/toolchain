@@ -1,0 +1,37 @@
+{
+  "terminal.integrated.env.osx": {
+    "PATH": "${workspaceFolder}/bin:${env:PATH}",
+    "CPCREADY": "PROJECT",
+    "CPCREADY_DIR": "${workspaceFolder}",
+    "CPCREADY_LIB": "${workspaceFolder}/lib/cpc-common.sh"
+  },
+  "terminal.integrated.env.linux": {
+    "PATH": "${workspaceFolder}/bin:${env:PATH}",
+    "CPCREADY": "PROJECT", 
+    "CPCREADY_DIR": "${workspaceFolder}",
+    "CPCREADY_LIB": "${workspaceFolder}/lib/cpc-common.sh"
+  },
+  "terminal.integrated.env.windows": {
+    "PATH": "${workspaceFolder}/bin;${env:PATH}",
+    "CPCREADY": "PROJECT",
+    "CPCREADY_DIR": "${workspaceFolder}", 
+    "CPCREADY_LIB": "${workspaceFolder}/lib/cpc-common.sh"
+  },
+  "python.defaultInterpreterPath": "/usr/bin/python3",
+  "files.associations": {
+    "*.sh": "shellscript",
+    ".envrc": "shellscript",
+    ".dev": "shellscript"
+  },
+  "shellcheck.enable": true,
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "workbench.startupEditor": "readme",
+  "files.exclude": {
+    "**/.DS_Store": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.git": true,
+    "**/.DS_Store": true
+  }
+}

@@ -12,9 +12,11 @@ Thumbs.db
 *.swp
 *.swo
 *.tmp
+*.temp
 
 # Archivos de logs
 *.log
+logs/
 
 # Archivos de backup
 *.bak
@@ -25,13 +27,32 @@ Thumbs.db
 *.zip
 *.rar
 
-# archivos cpcready
-.cpcready
-.cpc
-.envrc
-*/tests
-publish-release.sh
+# Cache
+.cache/
+*.cache
+
+# Archivos específicos del proyecto (desarrollo)
+# NOTAS.TXT - comentado para incluir en repo si contiene info importante
+# 0Basura/ - comentado para incluir código experimental
+# commit.sh - comentado para incluir scripts de desarrollo
+# publish-release.sh - comentado para incluir scripts de release
+
+# Archivos de emulador (resultados, no código fuente)
+*.dsk
+*.sna
+*.cdt
+
+# Directorios de instalación local
+.cpcready-local/
+
+# Configuraciones de usuario específicas
+.env.local
+user-config.yml
+local-settings.sh
+
+# VS Code settings backup
+.vscode/settings.json.backup
 0Basura/
-commit.sh
 NOTAS.TXT
-.dev
+scripts/*
+cosas/*

@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "ms-vscode.vscode-direnv",
+    "timonwong.shellcheck",
+    "foxundermoon.shell-format",
+    "ms-vscode.vscode-terminal",
+    "redhat.vscode-yaml"
+  ]
+}
