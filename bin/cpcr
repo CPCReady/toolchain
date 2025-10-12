@@ -26,11 +26,11 @@
   set -euo pipefail
 
   #------------------------------------------------------------
-  # Detecta si se llamó como "cpc" o "cpc-<comando>"
+  # Detecta si se llamó como "cpc" o "cpcr-<comando>"
   #------------------------------------------------------------
   BASENAME="$(basename "$0")"
-  if [[ "$BASENAME" == cpc-* ]]; then
-    COMMAND="${BASENAME#cpc-}"
+  if [[ "$BASENAME" == cpcr-* ]]; then
+    COMMAND="${BASENAME#cpcr-}"
   else
     COMMAND="${1:-}"
     shift || true
@@ -47,7 +47,7 @@
   
   # Configurar rutas basándose en brew --prefix
   CPCREADY_DIR="$BREW_PREFIX"
-  CPCREADY_LIB="$CPCREADY_DIR/lib/cpc-common.sh"
+  CPCREADY_LIB="$CPCREADY_DIR/lib/cpcr-common.sh"
   
   # Verificar que las librerías existen
   if [[ ! -f "$CPCREADY_LIB" ]]; then
@@ -62,7 +62,7 @@
   # Función para mostrar la ayuda
   usage() {
       echo
-      echo "Usage: cpc <command> [arguments...]"
+      echo "Usage: cpcr <command> [arguments...]"
       echo
       echo "CPCReady - Toolchain for Amstrad CPC development"
       echo
@@ -97,16 +97,16 @@
       exit 0
       ;;
     "save")
-      source "$CPCREADY_DIR/lib/cpc-save.sh" "$@"
+      source "$CPCREADY_DIR/lib/cpcr-save.sh" "$@"
       ;;
     "run")
-      source "$CPCREADY_DIR/lib/cpc-run.sh" "$@"
+      source "$CPCREADY_DIR/lib/cpcr-run.sh" "$@"
       ;;
     "disc")
-      source "$CPCREADY_DIR/lib/cpc-disc.sh" "$@"
+      source "$CPCREADY_DIR/lib/cpcr-disc.sh" "$@"
       ;;
     "version")
-      source "$CPCREADY_DIR/lib/cpc-version.sh" "$@"
+      source "$CPCREADY_DIR/lib/cpcr-version.sh" "$@"
       ;;
     "logo")
       __cpcready_logo

@@ -25,14 +25,18 @@
 ##--------------------------------------------------------------------------------
 
 # Carga la librería de funciones comunes
-source "$CPCREADY_DIR/lib/cpc-common.sh"
+#!/bin/bash
+set -a
+source "$CPCREADY_DIR/lib/cpcr-common.sh"
+# source "$CPCREADY_CONFIG_FILE"
+set +a
 
 # Función para mostrar la ayuda
 usage() {
   local BASENAME="$(basename "$0")"
   echo
-  if [[ "$BASENAME" == "cpc-disc" ]]; then
-    echo "Usage: cpc-disc <drive> [disc_name]"
+  if [[ "$BASENAME" == "cpcr-disc" ]]; then
+    echo "Usage: cpcr-disc <drive> [disc_name]"
   else
     echo "Usage: cpc disc <drive> [disc_name]"
   fi
@@ -63,22 +67,22 @@ usage() {
 
 # Función principal para comando disc
 function main() {
-  local DRIVE="${1:-}"
-  local DISC_NAME="${2:-}"
 
-  if [[ -z "$DRIVE" ]]; then
-    __cpcready_logo
-    usage
-    exit 0
+  # Pasamos variables a mayúsculas para evitar problemas
+  DRIVE=$(echo "${1:-}" | tr '[:lower:]' '[:upper:]')
+  DISC_NAME=$(echo "${2:-}" | tr '[:lower:]' '[:upper:]')
+
+  # Verificar argumentos pasados
+  if [[ -n "$1" && -z "$2" ]]; then
+  
+      __cpcready_echo_green "Drive $DRIVE selected."
+      __cpcready_set_config_file "DRIVE_SELECTED" "$DRIVE"
+      __cpcready_config_file
+
+  elif [[ -n "$1" && -n "$2" ]]; then
+      __cpcready_echo_green "Drive $DRIVE selected. Disk: $DISC_NAME"
   fi
 
-  DRIVE=$(echo "$DRIVE" | tr '[:lower:]' '[:upper:]')
-
-  if [[ -z "$DISC_NAME" ]]; then
-    __cpcready_echo_green "Drive $DRIVE selected."
-  else
-    __cpcready_echo_green "Drive $DRIVE selected. Disk: $DISC_NAME"
-  fi
 }
 
 ARG1="${1:-}"

@@ -24,7 +24,21 @@
 ##  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##--------------------------------------------------------------------------------
 
+CPCREADY_CONFIG_FILE="$HOME/.config/cpcready/config.cfg"
 
+# Función para establecer o actualizar una clave en el archivo de configuración
+# Uso: __cpcready_set_config_file <clave> <valor>
+function __cpcready_set_config_file() {
+  cpc-key set $CPCREADY_CONFIG_FILE "$1" "$2"
+}
+
+# Función para cargar el archivo de configuración y exportar las variables
+# Uso: __cpcready_config_file
+function __cpcready_config_file() {
+  set -a
+  source "$CPCREADY_CONFIG_FILE"
+  set +a
+}
 
 # Función para detectar si el terminal soporta colores
 function __cpcready_supports_color() {
